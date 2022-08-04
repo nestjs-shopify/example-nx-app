@@ -7,7 +7,6 @@ import { ShopifyCoreModule } from '@nestjs-shopify/core';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { databaseConfig } from './config/database.config';
-import { ExceptionFiltersModule } from './exception-filters/exception-filters.module';
 import { ProductsModule } from './products/products.module';
 import { AfterAuthModule } from './shopify/after-auth/after-auth.module';
 import {
@@ -34,7 +33,6 @@ import { ShopifyOnlineConfigService } from './shopify/services/shopify-online-co
       imports: [ConfigModule.forFeature(shopifyOnlineConfig), AfterAuthModule],
       useClass: ShopifyOnlineConfigService,
     }),
-    ExceptionFiltersModule,
     ProductsModule,
   ],
 })
