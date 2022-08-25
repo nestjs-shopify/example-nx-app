@@ -1,6 +1,6 @@
 import { ShopifyAuthAfterHandler } from '@nestjs-shopify/auth';
 import { ShopifyWebhooksService } from '@nestjs-shopify/webhooks';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { SessionInterface } from '@shopify/shopify-api';
 import { Request, Response } from 'express';
 import { ShopsService } from '../../shops/shops.service';
@@ -29,6 +29,7 @@ export class AfterAuthHandlerService implements ShopifyAuthAfterHandler {
     }
 
     await this.shopsService.findOrCreate(shop, accessToken);
+    Logger.log('Registering webhooks');
     await this.webhookService.registerWebhooks({
       shop,
       accessToken,
