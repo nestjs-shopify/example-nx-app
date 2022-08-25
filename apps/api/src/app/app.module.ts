@@ -13,6 +13,7 @@ import {
 } from './shopify/config';
 import { ShopifyOfflineConfigService } from './shopify/services/shopify-offline-config.service';
 import { ShopifyOnlineConfigService } from './shopify/services/shopify-online-config.service';
+import { WebhooksModule } from './shopify/webhooks/webhooks.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ShopifyOnlineConfigService } from './shopify/services/shopify-online-co
       imports: [ConfigModule.forFeature(shopifyOnlineConfig), AfterAuthModule],
       useClass: ShopifyOnlineConfigService,
     }),
+    WebhooksModule,
     ProductsModule,
   ],
 })
