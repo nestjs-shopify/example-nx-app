@@ -1,8 +1,5 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import {
-  ShopifyAuthOfflineModule,
-  ShopifyAuthOnlineModule,
-} from '@nestjs-shopify/auth';
+import { ShopifyAuthModule } from '@nestjs-shopify/auth';
 import { ShopifyCoreModule } from '@nestjs-shopify/core';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -25,11 +22,11 @@ import { ShopifyOnlineConfigService } from './shopify/services/shopify-online-co
     }),
     MikroOrmModule.forRootAsync(databaseConfig.asProvider()),
     ShopifyCoreModule.forRootAsync(shopifyCoreConfig.asProvider()),
-    ShopifyAuthOfflineModule.forRootAsync({
+    ShopifyAuthModule.forRootAsyncOffline({
       imports: [ConfigModule.forFeature(shopifyOfflineConfig), AfterAuthModule],
       useClass: ShopifyOfflineConfigService,
     }),
-    ShopifyAuthOnlineModule.forRootAsync({
+    ShopifyAuthModule.forRootAsyncOnline({
       imports: [ConfigModule.forFeature(shopifyOnlineConfig), AfterAuthModule],
       useClass: ShopifyOnlineConfigService,
     }),
