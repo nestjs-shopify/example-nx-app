@@ -8,7 +8,7 @@ export const getShopifyCoreConfig = (): ShopifyCoreOptions => ({
   apiVersion: ApiVersion.April22,
   hostName: process.env.HOST.replace(/https?:\/\//, ''),
   isEmbeddedApp: true,
-  scopes: ['read_products'],
+  scopes: ['write_products'],
 });
 
 export const shopifyCoreConfig = registerAs(
