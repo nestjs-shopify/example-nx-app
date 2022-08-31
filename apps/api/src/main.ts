@@ -20,6 +20,9 @@ async function bootstrap() {
   Logger.log(`🚀 Application is running on: ${host}/${globalPrefix}`);
 
   Logger.log(`Login using: ${host}/?shop=${shop}`);
+  Logger.log(
+    `Install using: ${host}/${globalPrefix}/offline/auth?shop=${shop}`
+  );
 }
 
 bootstrap();
