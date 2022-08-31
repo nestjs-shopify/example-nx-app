@@ -1,7 +1,9 @@
-# Example @nestjs-shopify/@nestjs-shopify application
+# Example @nestjs-shopify application
 
 Uses [NX monorepo](https://nx.dev) under the hood. An example Shopify application
 with a [NestJS](https://nestjs.com) API backend, and a [NextJS](https://nextjs.org) frontend.
+
+Uses [@nestjs-shopify/*](https://github.com/nestjs-shopify/nestjs-shopify) packages.
 
 ## Architecture
 
