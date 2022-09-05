@@ -66,7 +66,7 @@ export function ProductsCard() {
             loading={loading}
             onClick={() => {
               Promise.all(
-                Array.from({ length: 5 }).map(() =>
+                Array.from({ length: 1 }).map(() =>
                   populateProduct({
                     variables: {
                       input: {
