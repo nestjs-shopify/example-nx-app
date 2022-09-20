@@ -14,7 +14,12 @@ export class DatabaseSessionStorage implements SessionStorage {
   ) {}
 
   async storeSession(session: SessionInterface): Promise<boolean> {
-    const entity = this.repo.create(session);
+    let entity = await this.loadSession(session.id);
+    if (!entity) {
+      entity = this.repo.create(session);
+    } else {
+      entity = this.repo.assign(entity, session);
+    }
 
     try {
       await this.repo.persistAndFlush(entity);

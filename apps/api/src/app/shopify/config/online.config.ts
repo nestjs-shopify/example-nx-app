@@ -6,6 +6,7 @@ export const SHOPIFY_ONLINE_BASE_PATH = '/online';
 export const getShopifyOnlineConfig = (): ShopifyAuthModuleOptions => ({
   basePath: SHOPIFY_ONLINE_BASE_PATH,
   useGlobalPrefix: true,
+  returnHeaders: true,
 });
 
 export const shopifyOnlineConfig = registerAs(
