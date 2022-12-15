@@ -1,7 +1,6 @@
 import { InjectRepository } from '@mikro-orm/nestjs';
+import { SessionStorage } from '@nestjs-shopify/core';
 import { Injectable, Logger } from '@nestjs/common';
-import { SessionInterface } from '@shopify/shopify-api';
-import { SessionStorage } from '@shopify/shopify-api/dist/auth/session';
 import { SessionEntity } from './session.entity';
 import { SessionRepository } from './session.repository';
 
@@ -13,7 +12,7 @@ export class DatabaseSessionStorage implements SessionStorage {
     @InjectRepository(SessionEntity) private readonly repo: SessionRepository
   ) {}
 
-  async storeSession(session: SessionInterface): Promise<boolean> {
+  async storeSession(session: SessionEntity): Promise<boolean> {
     let entity = await this.loadSession(session.id);
     if (!entity) {
       entity = this.repo.create(session);
@@ -31,7 +30,7 @@ export class DatabaseSessionStorage implements SessionStorage {
     return false;
   }
 
-  async loadSession(id: string): Promise<SessionInterface> {
+  async loadSession(id: string): Promise<SessionEntity> {
     return await this.repo.findOne(id);
   }
 
@@ -47,7 +46,7 @@ export class DatabaseSessionStorage implements SessionStorage {
     return false;
   }
 
-  async deleteSessions?(ids: string[]): Promise<boolean> {
+  async deleteSessions(ids: string[]): Promise<boolean> {
     const sessions = await this.repo.find(ids);
     sessions.forEach((s) => this.repo.remove(s));
     await this.repo.flush();
@@ -55,7 +54,7 @@ export class DatabaseSessionStorage implements SessionStorage {
     return true;
   }
 
-  async findSessionsByShop?(shop: string): Promise<SessionInterface[]> {
+  async findSessionsByShop(shop: string): Promise<SessionEntity[]> {
     const sessions = await this.repo.find({ shop });
 
     return sessions;

@@ -1,13 +1,20 @@
 import { CurrentSession, UseShopifyAuth } from '@nestjs-shopify/auth';
-import { Controller, Get } from '@nestjs/common';
-import { Session } from '@shopify/shopify-api/dist/auth/session';
-import { Product } from '@shopify/shopify-api/dist/rest-resources/2022-04';
+import { SHOPIFY_API_CONTEXT } from '@nestjs-shopify/core';
+import { Controller, Get, Inject } from '@nestjs/common';
+import { Shopify } from '@shopify/shopify-api';
+import { restResources } from '@shopify/shopify-api/rest/admin/2022-10';
+import { SessionEntity } from '../session/session.entity';
 
 @UseShopifyAuth()
 @Controller('products')
 export class ProductsController {
+  constructor(
+    @Inject(SHOPIFY_API_CONTEXT)
+    private readonly shopifyApi: Shopify<typeof restResources>
+  ) {}
+
   @Get('count')
-  async count(@CurrentSession() session: Session) {
-    return await Product.count({ session });
+  async count(@CurrentSession() session: SessionEntity) {
+    return await this.shopifyApi.rest.Product.count({ session });
   }
 }

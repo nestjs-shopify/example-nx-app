@@ -1,6 +1,7 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { ShopifyAuthModule } from '@nestjs-shopify/auth';
 import { ShopifyCoreModule } from '@nestjs-shopify/core';
+import { ShopifyGraphqlProxyModule } from '@nestjs-shopify/graphql';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { databaseConfig } from './config/database.config';
@@ -36,6 +37,7 @@ import { WebhooksModule } from './shopify/webhooks/webhooks.module';
       imports: [ConfigModule.forFeature(shopifyOnlineConfig), AfterAuthModule],
       useClass: ShopifyOnlineConfigService,
     }),
+    ShopifyGraphqlProxyModule,
     WebhooksModule,
     ProductsModule,
   ],

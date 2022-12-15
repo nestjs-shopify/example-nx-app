@@ -17,10 +17,14 @@ export class ProductsCreateWebhookHandler extends ShopifyWebhookHandler<unknown>
     super();
   }
 
-  async handle(domain: string, data: unknown): Promise<void> {
+  async handle(
+    domain: string,
+    data: unknown,
+    webhookId: string
+  ): Promise<void> {
     const shop = await this.shopRepo.findOneOrFail({ domain });
 
-    this.logger.debug(`Webhook called for shop ID ${shop.id}`);
+    this.logger.log(`Webhook ${webhookId} called for shop ID ${shop}`);
     this.logger.log(data);
   }
 }
