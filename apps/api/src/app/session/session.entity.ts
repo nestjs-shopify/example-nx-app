@@ -1,12 +1,12 @@
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
-import { OnlineAccessInfo, SessionInterface } from '@shopify/shopify-api';
+import { OnlineAccessInfo, Session } from '@shopify/shopify-api';
 import { SessionRepository } from './session.repository';
 
 @Entity({
   tableName: 'sessions',
   customRepository: () => SessionRepository,
 })
-export class SessionEntity implements SessionInterface {
+export class SessionEntity extends Session {
   @PrimaryKey({ type: 'string' })
   public id: string;
 
@@ -30,8 +30,4 @@ export class SessionEntity implements SessionInterface {
 
   @Property({ type: 'json', nullable: true })
   public onlineAccessInfo?: OnlineAccessInfo;
-
-  isActive(): boolean {
-    return new Date() > this.expires;
-  }
 }
