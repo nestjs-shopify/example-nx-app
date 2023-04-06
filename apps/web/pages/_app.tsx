@@ -61,10 +61,17 @@ MyApp.getInitialProps = async ({ ctx: { query, res } }) => {
 
   if (!host) {
     const currentShop = shop ?? process.env.SHOP;
-    res.writeHead(307, { Location: `/api/online/auth?shop=${currentShop}` });
-    res.end();
 
-    return { pageProps: {} };
+    if (res) {
+      res.writeHead(307, { Location: `/api/online/auth?shop=${currentShop}` });
+      res.end();
+
+      return { pageProps: {} };
+    }
+
+    return {
+      pageProps: {},
+    };
   }
 
   return {
