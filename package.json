@@ -10,9 +10,9 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.6.9",
-    "@mikro-orm/core": "^5.3.0",
-    "@mikro-orm/nestjs": "^5.1.0",
-    "@mikro-orm/sqlite": "^5.3.0",
+    "@mikro-orm/core": "^5.6.16",
+    "@mikro-orm/nestjs": "^5.1.8",
+    "@mikro-orm/sqlite": "^5.6.16",
     "@nestjs-shopify/auth": "^3.2.1",
     "@nestjs-shopify/core": "^2.1.0",
     "@nestjs-shopify/graphql": "^3.1.0",
@@ -39,7 +39,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@mikro-orm/cli": "^5.3.0",
+    "@mikro-orm/cli": "^5.6.16",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
     "@nrwl/cli": "14.5.1",
