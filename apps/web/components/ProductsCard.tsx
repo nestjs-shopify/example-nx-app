@@ -1,12 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import {
-  Card,
-  Heading,
-  TextContainer,
-  DisplayText,
-  TextStyle,
-  Button,
-} from '@shopify/polaris';
+import { AlphaStack, Button, LegacyCard, Text } from '@shopify/polaris';
 import { Toast, useAppBridge } from '@shopify/app-bridge-react';
 import { gql, useMutation } from '@apollo/client';
 import { userLoggedInFetch } from '../utils/userLoggedInFetch';
@@ -41,7 +34,7 @@ export function ProductsCard() {
 
   const toastMarkup = hasResults && (
     <Toast
-      content="5 products created!"
+      content="1 product created!"
       onDismiss={() => setHasResults(false)}
     />
   );
@@ -49,18 +42,21 @@ export function ProductsCard() {
   return (
     <>
       {toastMarkup}
-      <Card title="Product Counter" sectioned>
-        <TextContainer spacing="loose">
+      <LegacyCard title="Product Counter" sectioned>
+        <AlphaStack gap="4">
           <p>
             Sample products are created with a default title and price. You can
             remove them at any time.
           </p>
-          <Heading element="h4">
+
+          <Text as="h2" variant="headingXl">
             TOTAL PRODUCTS
-            <DisplayText size="medium">
-              <TextStyle variation="strong">{productCount}</TextStyle>
-            </DisplayText>
-          </Heading>
+          </Text>
+
+          <Text as="p" fontWeight="bold" variant="heading2xl">
+            {productCount}
+          </Text>
+
           <Button
             primary
             loading={loading}
@@ -81,10 +77,10 @@ export function ProductsCard() {
               });
             }}
           >
-            Populate 5 products
+            Populate 1 product
           </Button>
-        </TextContainer>
-      </Card>
+        </AlphaStack>
+      </LegacyCard>
     </>
   );
 }

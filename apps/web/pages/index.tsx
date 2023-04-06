@@ -1,10 +1,10 @@
 import {
-  Card,
-  Page,
+  AlphaStack,
   Layout,
-  TextContainer,
+  LegacyCard,
   Link,
-  Heading,
+  Page,
+  Text,
 } from '@shopify/polaris';
 
 import { ProductsCard } from '../components/ProductsCard';
@@ -14,9 +14,11 @@ export default function HomePage() {
     <Page fullWidth>
       <Layout>
         <Layout.Section>
-          <Card sectioned>
-            <TextContainer spacing="loose">
-              <Heading>Nice work on building a Shopify app 🎉</Heading>
+          <LegacyCard sectioned>
+            <AlphaStack gap="4">
+              <Text as="h2" variant="headingMd">
+                Nice work on building a Shopify app 🎉
+              </Text>
               <p>
                 Your app is ready to explore! It contains everything you need to
                 get started including the{' '}
@@ -47,8 +49,8 @@ export default function HomePage() {
                 </Link>{' '}
                 📚{' '}
               </p>
-            </TextContainer>
-          </Card>
+            </AlphaStack>
+          </LegacyCard>
         </Layout.Section>
         <Layout.Section secondary>
           <ProductsCard />
