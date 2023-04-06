@@ -17,7 +17,7 @@ export const getShopifyCoreConfig = (): Omit<
   isEmbeddedApp: true,
   scopes: ['write_products'],
   hostScheme: 'https',
-  isPrivateApp: false,
+  isCustomStoreApp: false,
   restResources,
   logger: {
     httpRequests: false,
