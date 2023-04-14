@@ -25,7 +25,7 @@ export const getShopifyCoreConfig = (): Omit<
       process.env.NODE_ENV !== 'production'
         ? LogSeverity.Debug
         : LogSeverity.Info,
-    log: async (_severity, msg) => logger.log(msg),
+    log: (_severity, msg) => logger.log(msg),
     timestamps: false,
   },
 });
