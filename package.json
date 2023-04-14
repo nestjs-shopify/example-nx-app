@@ -13,7 +13,7 @@
     "@mikro-orm/core": "^5.6.16",
     "@mikro-orm/nestjs": "^5.1.8",
     "@mikro-orm/sqlite": "^5.6.16",
-    "@nestjs-shopify/auth": "^3.2.1",
+    "@nestjs-shopify/auth": "^4.0.0",
     "@nestjs-shopify/core": "^2.1.0",
     "@nestjs-shopify/graphql": "^3.1.0",
     "@nestjs-shopify/webhooks": "^2.1.0",
