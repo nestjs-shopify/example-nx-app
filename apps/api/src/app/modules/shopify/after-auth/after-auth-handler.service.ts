@@ -2,8 +2,8 @@ import { ShopifyAuthAfterHandler } from '@nestjs-shopify/auth';
 import { ShopifyWebhooksService } from '@nestjs-shopify/webhooks';
 import { Injectable, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { SessionEntity } from '../../session/session.entity';
 import { ShopsService } from '../../shops/shops.service';
+import { SessionEntity } from '../../../entities/session.entity';
 
 @Injectable()
 export class AfterAuthHandlerService implements ShopifyAuthAfterHandler {

@@ -3,7 +3,7 @@ import { SHOPIFY_API_CONTEXT } from '@nestjs-shopify/core';
 import { Controller, Get, Inject } from '@nestjs/common';
 import { Shopify } from '@shopify/shopify-api';
 import { restResources } from '@shopify/shopify-api/rest/admin/2022-10';
-import { SessionEntity } from '../session/session.entity';
+import { SessionEntity } from '../../entities/session.entity';
 
 @UseShopifyAuth()
 @Controller('products')

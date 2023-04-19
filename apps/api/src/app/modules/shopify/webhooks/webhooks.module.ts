@@ -1,12 +1,12 @@
-import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { ShopifyWebhooksModule } from '@nestjs-shopify/webhooks';
 import { Module } from '@nestjs/common';
-import { ShopEntity } from '../../shops/shop.entity';
+import { ShopEntity } from '../../../entities/shop.entity';
 import { ProductsCreateWebhookHandler } from './handlers/products-create.webhook-handler';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
-    MikroOrmModule.forFeature([ShopEntity]),
+    TypeOrmModule.forFeature([ShopEntity]),
     ShopifyWebhooksModule.forRoot({
       path: '/shopify/webhooks',
     }),

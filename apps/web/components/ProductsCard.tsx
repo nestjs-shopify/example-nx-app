@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { AlphaStack, Button, LegacyCard, Text } from '@shopify/polaris';
+import { VerticalStack, Button, LegacyCard, Text } from '@shopify/polaris';
 import { Toast, useAppBridge } from '@shopify/app-bridge-react';
 import { gql, useMutation } from '@apollo/client';
 import { userLoggedInFetch } from '../utils/userLoggedInFetch';
@@ -43,7 +43,7 @@ export function ProductsCard() {
     <>
       {toastMarkup}
       <LegacyCard title="Product Counter" sectioned>
-        <AlphaStack gap="4">
+        <VerticalStack gap="4">
           <p>
             Sample products are created with a default title and price. You can
             remove them at any time.
@@ -79,7 +79,7 @@ export function ProductsCard() {
           >
             Populate 1 product
           </Button>
-        </AlphaStack>
+        </VerticalStack>
       </LegacyCard>
     </>
   );
