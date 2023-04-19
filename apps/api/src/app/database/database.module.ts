@@ -8,21 +8,34 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
       imports: [ConfigModule],
       useFactory: async (
         configService: ConfigService
-      ): Promise<TypeOrmModuleOptions> => ({
-        type: configService.get<string>('DATABASE_CONNECTION') as any,
-        host: configService.get<string>('DATABASE_HOST'),
-        port: configService.get<number>('DATABASE_PORT'),
-        username: configService.get<string>('DATABASE_USERNAME'),
-        password: configService.get<string>('DATABASE_PASSWORD'),
-        database: configService.get<string>('DATABASE_DB_NAME'),
-        entities: [__dirname + './../entities/**.entity{.ts,.js}'],
-        timezone: configService.get<string>('TIMEZONE') || '+07:00',
-        synchronize: true,
-        autoLoadEntities: true,
-        logging: 'all',
-        logger: 'advanced-console',
-        charset: "utf8mb4",
-      }),
+      ): Promise<TypeOrmModuleOptions> => {
+        const slaves = [];
+        const slaveServersStr = configService.get<string>('slave_servers');
+        const slave = configService.get<Record<string, unknown>[]>(
+          'mysql_slave_general'
+        );
+        const slaveServers = slaveServersStr.split(',');
+        slaveServers.forEach((server) => {
+          const one: Record<string, unknown> = { ...slave };
+          one.host = server;
+
+          slaves.push(one);
+        });
+        return {
+          type: configService.get<string>('DATABASE_CONNECTION') as any,
+          replication: {
+            master: configService.get<Record<string, unknown>>('mysql_master'),
+            slaves,
+          },
+          entities: [__dirname + './../entities/**.entity{.ts,.js}'],
+          timezone: configService.get<string>('TIMEZONE') || '+07:00',
+          synchronize: true,
+          autoLoadEntities: true,
+          logging: 'all',
+          logger: 'advanced-console',
+          charset: 'utf8mb4',
+        };
+      },
       inject: [ConfigService],
     }),
   ],
