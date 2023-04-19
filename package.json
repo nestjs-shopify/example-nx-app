@@ -6,6 +6,7 @@
     "start": "nx serve",
     "start:api": "nx run api:serve",
     "start:web": "nx run web:serve",
+    "format:write": "nx format:write",
     "build": "nx build",
     "test": "nx test",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",

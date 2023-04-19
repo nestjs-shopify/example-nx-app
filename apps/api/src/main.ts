@@ -1,4 +1,5 @@
 import '@shopify/shopify-api/adapters/node';
+import fastify from 'fastify';
 import { LogLevel, Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import {
@@ -21,9 +22,20 @@ async function bootstrap() {
 
   const logLevel = process.env.LOG_LEVEL || 'log,error,warn,debug,verbose';
   logLevelsDefault = logLevel.split(',') as LogLevel[];
+
+  const instance = fastify();
+  instance.addHook('onRequest', (request, reply, done) => {
+    reply['setHeader'] = function (key, value) {
+      return this.raw.setHeader(key, value);
+    };
+    reply['end'] = function () {
+      this.raw.end();
+    };
+    done();
+  });
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    new FastifyAdapter(instance),
     {
       logger: logLevelsDefault,
       rawBody: true,
