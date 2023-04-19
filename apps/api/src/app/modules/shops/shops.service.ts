@@ -11,8 +11,6 @@ export class ShopsService {
 
   async findOrCreate(domain: string, accessToken: string): Promise<ShopEntity> {
     let shop = await this.repo.findOne({ where: { domain } });
-    console.log('logggggggggggggggggggggggggggggggggggggggggggggggggggg');
-    console.log(shop);
     
     if (shop) {
       await this.repo.update(shop.id, { accessToken });
