@@ -17,7 +17,6 @@ export default class RedisComponent {
       password: password,
       db,
     };
-    console.log(redisOption);
     
     try {
       this.redis = new Redis(redisOption);
