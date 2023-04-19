@@ -1,10 +1,10 @@
-import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 import { DatabaseSessionStorage } from './database.session-storage';
-import { SessionEntity } from './session.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { SessionEntity } from '../../entities/session.entity';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([SessionEntity])],
+  imports: [TypeOrmModule.forFeature([SessionEntity])],
   providers: [DatabaseSessionStorage],
   exports: [DatabaseSessionStorage],
 })

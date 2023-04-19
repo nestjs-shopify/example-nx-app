@@ -1,27 +1,26 @@
-import { InjectRepository } from '@mikro-orm/nestjs';
 import { SessionStorage } from '@nestjs-shopify/core';
 import { Injectable, Logger } from '@nestjs/common';
-import { SessionEntity } from './session.entity';
-import { SessionRepository } from './session.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { In, Repository } from 'typeorm';
+import { SessionEntity } from '../../entities/session.entity';
 
 @Injectable()
 export class DatabaseSessionStorage implements SessionStorage {
   private readonly logger = new Logger('SessionStorage');
 
   constructor(
-    @InjectRepository(SessionEntity) private readonly repo: SessionRepository
+    @InjectRepository(SessionEntity)
+    private readonly repo: Repository<SessionEntity>
   ) {}
 
   async storeSession(session: SessionEntity): Promise<boolean> {
-    let entity = await this.loadSession(session.id);
-    if (!entity) {
-      entity = this.repo.create(session);
-    } else {
-      entity = this.repo.assign(entity, session);
-    }
-
     try {
-      await this.repo.persistAndFlush(entity);
+      let entity = await this.loadSession(session.id);
+      if (!entity) {
+        entity = await this.repo.save(session);
+      } else {
+        await this.repo.update(entity.id, session);
+      }
       return true;
     } catch (err) {
       this.logger.error(err);
@@ -31,13 +30,13 @@ export class DatabaseSessionStorage implements SessionStorage {
   }
 
   async loadSession(id: string): Promise<SessionEntity> {
-    return await this.repo.findOne(id);
+    return await this.repo.findOneBy({ id: id });
   }
 
   async deleteSession(id: string): Promise<boolean> {
     try {
-      const session = await this.repo.findOneOrFail(id);
-      await this.repo.removeAndFlush(session);
+      const session = await this.repo.findOneBy({ id });
+      await this.repo.delete(session.id);
       return true;
     } catch (err) {
       this.logger.error(err);
@@ -47,15 +46,14 @@ export class DatabaseSessionStorage implements SessionStorage {
   }
 
   async deleteSessions(ids: string[]): Promise<boolean> {
-    const sessions = await this.repo.find(ids);
+    const sessions = await this.repo.find({ where: { id: In(ids) } });
     sessions.forEach((s) => this.repo.remove(s));
-    await this.repo.flush();
 
     return true;
   }
 
   async findSessionsByShop(shop: string): Promise<SessionEntity[]> {
-    const sessions = await this.repo.find({ shop });
+    const sessions = await this.repo.find({ where: { shop } });
 
     return sessions;
   }

@@ -1,5 +1,5 @@
 import {
-  AlphaStack,
+  VerticalStack,
   Layout,
   LegacyCard,
   Link,
@@ -15,7 +15,7 @@ export default function HomePage() {
       <Layout>
         <Layout.Section>
           <LegacyCard sectioned>
-            <AlphaStack gap="4">
+            <VerticalStack gap="4">
               <Text as="h2" variant="headingMd">
                 Nice work on building a Shopify app 🎉
               </Text>
@@ -49,7 +49,7 @@ export default function HomePage() {
                 </Link>{' '}
                 📚{' '}
               </p>
-            </AlphaStack>
+            </VerticalStack>
           </LegacyCard>
         </Layout.Section>
         <Layout.Section secondary>
