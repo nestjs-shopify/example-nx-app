@@ -16,7 +16,7 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_DB_NAME'),
         entities: [__dirname + './../entities/**.entity{.ts,.js}'],
-        timezone: configService.get<string>('TIMEZONE') || 'Asia/Ho_Chi_Minh',
+        timezone: configService.get<string>('TIMEZONE') || '+07:00',
         synchronize: true,
         autoLoadEntities: true,
         logging: 'all',

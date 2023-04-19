@@ -6,24 +6,24 @@ export class SessionEntity extends Session {
   @PrimaryColumn({ type: 'varchar' })
   id: string;
 
-  @Column()
-  shop!: string;
+  @Column({ name: 'shop', type: 'varchar', nullable: true })
+  shop: string;
 
-  @Column()
+  @Column({ name: 'state', type: 'varchar', nullable: true })
   state: string;
 
-  @Column()
+  @Column({ name: 'is_online', type: 'tinyint', nullable: true })
   isOnline: boolean;
 
-  @Column({ nullable: true })
-  scope?: string;
+  @Column({ name: 'scope', type: 'varchar', nullable: true })
+  scope: string;
 
-  @Column({ type: Date, nullable: true })
-  expires?: Date;
+  @Column({ name: 'expires', type: Date, nullable: true })
+  expires: Date;
 
-  @Column({ nullable: true })
+  @Column({ name: 'access_token', type: 'varchar', nullable: true })
   accessToken?: string;
 
-  @Column({ type: 'json', nullable: true })
+  @Column({ name: 'online_access_info', type: 'json', nullable: true })
   onlineAccessInfo?: OnlineAccessInfo;
 }

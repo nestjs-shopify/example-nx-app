@@ -5,9 +5,9 @@ export class ShopEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ name: 'domain', type: 'varchar', nullable: true })
   domain: string;
 
-  @Column()
+  @Column({ name: 'access_token', type: 'varchar', nullable: true })
   accessToken: string;
 }
