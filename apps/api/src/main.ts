@@ -2,9 +2,9 @@ import '@shopify/shopify-api/adapters/node';
 import { LogLevel, Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import {
-  ExpressAdapter,
-  NestExpressApplication,
-} from '@nestjs/platform-express';
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 
 import { AppModule } from './app/app.module';
 import { ConfigService } from '@nestjs/config';
@@ -21,11 +21,12 @@ async function bootstrap() {
 
   const logLevel = process.env.LOG_LEVEL || 'log,error,warn,debug,verbose';
   logLevelsDefault = logLevel.split(',') as LogLevel[];
-  const app = await NestFactory.create<NestExpressApplication>(
+  const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new ExpressAdapter(),
+    new FastifyAdapter(),
     {
       logger: logLevelsDefault,
+      rawBody: true,
     }
   );
   // ------------- Config ---------------
@@ -47,9 +48,7 @@ async function bootstrap() {
     Logger.log(`==========================================================`);
     Logger.log(`🚀 Application is running on: ${host}/${apiPrefix}`);
     Logger.log(`Login using: ${host}/?shop=${shop}`);
-    Logger.log(
-      `Install using: ${host}/${apiPrefix}/offline/auth?shop=${shop}`
-    );
+    Logger.log(`Install using: ${host}/${apiPrefix}/offline/auth?shop=${shop}`);
     Logger.log(`==========================================================`);
   });
 }

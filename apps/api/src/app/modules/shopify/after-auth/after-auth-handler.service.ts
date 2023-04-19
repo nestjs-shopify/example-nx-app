@@ -1,7 +1,7 @@
 import { ShopifyAuthAfterHandler } from '@nestjs-shopify/auth';
 import { ShopifyWebhooksService } from '@nestjs-shopify/webhooks';
 import { Injectable, Logger } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { FastifyRequest as Request, FastifyReply as Response} from 'fastify';
 import { ShopsService } from '../../shops/shops.service';
 import { SessionEntity } from '../../../entities/session.entity';
 
@@ -18,7 +18,7 @@ export class AfterAuthHandlerService implements ShopifyAuthAfterHandler {
     session: SessionEntity
   ): Promise<void> {
     const { isOnline, shop, accessToken } = session;
-    const { host } = req.query;
+    const host= req.query['host'];
 
     if (isOnline) {
       if (!(await this.shopsService.exists(shop))) {
