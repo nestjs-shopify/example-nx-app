@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
-
+import { useEffect, useState, useCallback } from 'react';
+import { VerticalStack, Button, LegacyCard, Text } from '@shopify/polaris';
+import { Toast, useAppBridge } from '@shopify/app-bridge-react';
 import { gql, useMutation } from '@apollo/client';
 import { Toast, useAppBridge } from '@shopify/app-bridge-react';
 import { Button, LegacyCard, Text, VerticalStack } from '@shopify/polaris';
@@ -25,7 +26,7 @@ export function ProductsCard() {
   const fetch = userLoggedInFetch(app);
   const updateProductCount = useCallback(async () => {
     const { count } = await fetch('/api/products/count').then((res) =>
-      res.json()
+      res?.json()
     );
     setProductCount(count);
   }, [fetch]);
