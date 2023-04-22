@@ -1,7 +1,24 @@
-import { useEffect, useState, useCallback } from 'react';
-import { VerticalStack, Button, LegacyCard, Text } from '@shopify/polaris';
-import { Toast, useAppBridge } from '@shopify/app-bridge-react';
-import { gql, useMutation } from '@apollo/client';
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
+
+import {
+  gql,
+  useMutation,
+} from '@apollo/client';
+import {
+  Toast,
+  useAppBridge,
+} from '@shopify/app-bridge-react';
+import {
+  Button,
+  LegacyCard,
+  Text,
+  VerticalStack,
+} from '@shopify/polaris';
+
 import { userLoggedInFetch } from '../utils/userLoggedInFetch';
 
 const PRODUCTS_QUERY = gql`

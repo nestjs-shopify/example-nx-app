@@ -1,14 +1,25 @@
 import '@shopify/shopify-api/adapters/node';
+
 import fastify from 'fastify';
-import { LogLevel, Logger, ValidationPipe } from '@nestjs/common';
+
+import {
+  INestApplication,
+  Logger,
+  LogLevel,
+  ValidationPipe,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import {
+  ExpressAdapter,
+  NestExpressApplication,
+} from '@nestjs/platform-express';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 
 import { AppModule } from './app/app.module';
-import { ConfigService } from '@nestjs/config';
 import { ValidationConfig } from './app/configs/validation.config';
 
 async function bootstrap() {
@@ -23,24 +34,36 @@ async function bootstrap() {
   const logLevel = process.env.LOG_LEVEL || 'log,error,warn,debug,verbose';
   logLevelsDefault = logLevel.split(',') as LogLevel[];
 
-  const instance = fastify();
-  instance.addHook('onRequest', (request, reply, done) => {
-    reply['setHeader'] = function (key, value) {
-      return this.raw.setHeader(key, value);
-    };
-    reply['end'] = function () {
-      this.raw.end();
-    };
-    done();
-  });
-  const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    new FastifyAdapter(instance),
-    {
-      logger: logLevelsDefault,
-      rawBody: true,
-    }
-  );
+  let app: INestApplication = null;
+  const fastifyEnabled = process.env.FASTIFY_ENABLED == "1" || false;
+  if (!fastifyEnabled) {
+    app = await NestFactory.create<NestExpressApplication>(
+      AppModule,
+      new ExpressAdapter(),
+      {
+        logger: logLevelsDefault,
+      }
+    );
+  } else {
+    const instance = fastify();
+    instance.addHook('onRequest', (request, reply, done) => {
+      reply['setHeader'] = function (key, value) {
+        return this.raw.setHeader(key, value);
+      };
+      reply['end'] = function () {
+        this.raw.end();
+      };
+      done();
+    });
+    app = await NestFactory.create<NestFastifyApplication>(
+      AppModule,
+      new FastifyAdapter(instance),
+      {
+        logger: logLevelsDefault,
+        rawBody: true,
+      }
+    );
+  }
   // ------------- Config ---------------
   const configService = app.get(ConfigService);
   const port: number = configService.get<number>('PORT') || 3333;
@@ -56,7 +79,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe(ValidationConfig));
   // -------------------------------------------
 
-  await app.listen(port, async () => {
+  await app.listen(port, '0.0.0.0', async () => {
     Logger.log(`==========================================================`);
     Logger.log(`🚀 Application is running on: ${host}/${apiPrefix}`);
     Logger.log(`Login using: ${host}/?shop=${shop}`);
