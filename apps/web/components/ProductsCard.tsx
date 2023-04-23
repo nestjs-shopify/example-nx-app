@@ -36,6 +36,7 @@ export function ProductsCard() {
   const [productCount, setProductCount] = useState(0);
   const [hasResults, setHasResults] = useState(false);
 
+
   const app = useAppBridge();
   const fetch = userLoggedInFetch(app);
   const updateProductCount = useCallback(async () => {
@@ -91,7 +92,10 @@ export function ProductsCard() {
               ).then(() => {
                 updateProductCount();
                 setHasResults(true);
-              });
+              }).catch(ex => {
+                console.error(ex)
+              })
+              ;
             }}
           >
             Populate 1 product

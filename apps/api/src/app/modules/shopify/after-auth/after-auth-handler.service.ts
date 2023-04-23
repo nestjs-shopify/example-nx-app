@@ -25,14 +25,15 @@ export class AfterAuthHandlerService implements ShopifyAuthAfterHandler {
     const { isOnline, shop, accessToken } = session;
     let host = "onionstudios.ddns.net";
     const fastifyEnabled = process.env.FASTIFY_ENABLED == "1" || false;
-    console.log("fastifyEnabled", fastifyEnabled)
+
     if (fastifyEnabled) {
-      host = req.headers['Host'] || 'onionstudios.ddns.net';
+      // Logger.log("fastifyEnabled", req, req.query);//onionstudios.ddns.net/?shop=getting-started-for-dev.myshopify.com)
+      host = req.query["host"] || req.headers['Host'] || 'onionstudios.ddns.net';
     }
     else {
       host = req.query['host'];
-      console.log("Host=", host, req.query);
     }
+    // Logger.log("Host=", host, req.query);
     if (isOnline) {
       if (!(await this.shopsService.exists(shop))) {
         if (fastifyEnabled) {
@@ -46,7 +47,6 @@ export class AfterAuthHandlerService implements ShopifyAuthAfterHandler {
           return resp.redirect(`/api/offline/auth?shop=${shop}`);
         }
       }
-      // res.setHeader("location",`/?shop=${shop}&host=${host}`)
       if (fastifyEnabled) {
         const res = resp.raw;
         res.writeHead(302, {
@@ -62,8 +62,6 @@ export class AfterAuthHandlerService implements ShopifyAuthAfterHandler {
     await this.shopsService.findOrCreate(shop, accessToken);
     Logger.log('Registering webhooks');
     await this.webhookService.registerWebhooks(session);
-    // res.setHeader("location",`/api/online/auth?shop=${shop}`)
-    // console.log(`redirect /api/online/auth?shop=${shop}`);
     if (fastifyEnabled) {
       const res = resp.raw;
       res.writeHead(302, {
