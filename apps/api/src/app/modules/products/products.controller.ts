@@ -25,7 +25,6 @@ export class ProductsController {
 
   @Get('count')
   async count(@CurrentSession() session: SessionEntity) {
-    console.log(session)
     return await this.shopifyApi.rest.Product.count({ session });
   }
 

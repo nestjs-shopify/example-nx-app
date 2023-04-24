@@ -50,6 +50,9 @@ async function bootstrap() {
       reply['setHeader'] = function (key, value) {
         return this.raw.setHeader(key, value);
       };
+      reply['writeHead'] = function (key, value) {
+        return this.raw.writeHead(key, value);
+      };
       reply['end'] = function () {
         this.raw.end();
       };

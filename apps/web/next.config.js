@@ -10,7 +10,7 @@ const nextConfig = {
     PORT: process.env.PORT,
   },
   async rewrites() {
-    console.log(process.env.API_URL)
+    // console.log(process.env.API_URL)
     return [
       {
         source: '/api/:path*',
