@@ -1,6 +1,10 @@
 import 'reflect-metadata';
+
 import { config } from 'dotenv';
-import { DataSource, DataSourceOptions } from 'typeorm';
+import {
+  DataSource,
+  DataSourceOptions,
+} from 'typeorm';
 
 import { ConfigService } from '@nestjs/config';
 
@@ -26,4 +30,4 @@ export const AppDataSource = new DataSource({
   // },
 } as DataSourceOptions);
 
-console.log(AppDataSource.options);
+// console.log(AppDataSource.options);

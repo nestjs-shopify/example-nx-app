@@ -1,8 +1,14 @@
 import { ShopifyCoreOptions } from '@nestjs-shopify/core';
 import { Logger } from '@nestjs/common';
-import { ConfigType, registerAs } from '@nestjs/config';
-import { ApiVersion, LogSeverity } from '@shopify/shopify-api';
-import { restResources } from '@shopify/shopify-api/rest/admin/2022-10';
+import {
+  ConfigType,
+  registerAs,
+} from '@nestjs/config';
+import {
+  ApiVersion,
+  LogSeverity,
+} from '@shopify/shopify-api';
+import { restResources } from '@shopify/shopify-api/rest/admin/2023-01';
 
 const logger = new Logger('Shopify');
 
@@ -12,7 +18,7 @@ export const getShopifyCoreConfig = (): Omit<
 > => ({
   apiKey: process.env.SHOPIFY_API_KEY,
   apiSecretKey: process.env.SHOPIFY_API_SECRET,
-  apiVersion: ApiVersion.October22,
+  apiVersion: ApiVersion.January23,
   hostName: process.env.HOST.replace(/https?:\/\//, ''),
   isEmbeddedApp: true,
   scopes: ['write_products'],

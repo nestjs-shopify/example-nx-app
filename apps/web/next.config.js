@@ -7,8 +7,10 @@ const withNx = require('@nrwl/next/plugins/with-nx');
 const nextConfig = {
   env: {
     SHOPIFY_API_KEY: process.env.SHOPIFY_API_KEY,
+    PORT: process.env.PORT,
   },
   async rewrites() {
+    // console.log(process.env.API_URL)
     return [
       {
         source: '/api/:path*',
