@@ -10,7 +10,7 @@
     "build": "nx build",
     "test": "nx test",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "typeorm:create": "npm run typeorm -- migration:create",
+    "typeorm:create": "npm run typeorm -- migration:create ./apps/api/src/app/database/migrations/%npm_config_name%",
     "typeorm:up": "npm run typeorm -- --dataSource=./data-source.ts migration:run",
     "typeorm:down": "npm run typeorm -- --dataSource=./data-source.ts migration:revert",
     "typeorm:show": "npm run typeorm -- --dataSource=./data-source.ts migration:show"
