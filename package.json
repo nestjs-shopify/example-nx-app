@@ -5,7 +5,9 @@
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "shopify": "shopify",
+    "update-url": "node tools/cli/update.url.mjs"
   },
   "private": true,
   "dependencies": {
@@ -57,6 +59,8 @@
     "@nrwl/webpack": "15.9.2",
     "@nrwl/workspace": "15.9.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
+    "@shopify/app": "^3.45.1",
+    "@shopify/cli": "^3.45.1",
     "@svgr/webpack": "^6.1.2",
     "@testing-library/react": "13.4.0",
     "@types/express": "4.17.17",
@@ -89,6 +93,7 @@
     "ts-jest": "29.1.0",
     "ts-node": "10.9.1",
     "typescript": "4.9.5",
+    "update-dotenv": "^1.1.1",
     "url-loader": "^4.1.1",
     "webpack": "^5.78.0",
     "webpack-merge": "^5.8.0"
