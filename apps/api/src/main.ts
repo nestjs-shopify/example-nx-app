@@ -35,7 +35,7 @@ async function bootstrap() {
   logLevelsDefault = logLevel.split(',') as LogLevel[];
 
   let app: INestApplication = null;
-  const fastifyEnabled = process.env.FASTIFY_ENABLED == "1" || false;
+  const fastifyEnabled = process.env.FASTIFY_ENABLED == '1' || false;
   if (!fastifyEnabled) {
     app = await NestFactory.create<NestExpressApplication>(
       AppModule,

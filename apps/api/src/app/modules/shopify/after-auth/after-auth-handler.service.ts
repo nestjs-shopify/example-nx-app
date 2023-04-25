@@ -1,9 +1,6 @@
 import { ShopifyAuthAfterHandler } from '@nestjs-shopify/auth';
 import { ShopifyWebhooksService } from '@nestjs-shopify/webhooks';
-import {
-  Injectable,
-  Logger,
-} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 import { SessionEntity } from '../../../entities/session.entity';
 import { ShopsService } from '../../shops/shops.service';
@@ -23,14 +20,14 @@ export class AfterAuthHandlerService implements ShopifyAuthAfterHandler {
     session: SessionEntity
   ): Promise<void> {
     const { isOnline, shop, accessToken } = session;
-    let host = "onionstudios.ddns.net";
-    const fastifyEnabled = process.env.FASTIFY_ENABLED == "1" || false;
+    let host = 'onionstudios.ddns.net';
+    const fastifyEnabled = process.env.FASTIFY_ENABLED == '1' || false;
 
     if (fastifyEnabled) {
       // Logger.log("fastifyEnabled", req, req.query);//onionstudios.ddns.net/?shop=getting-started-for-dev.myshopify.com)
-      host = req.query["host"] || req.headers['Host'] || 'onionstudios.ddns.net';
-    }
-    else {
+      host =
+        req.query['host'] || req.headers['Host'] || 'onionstudios.ddns.net';
+    } else {
       host = req.query['host'];
     }
     // Logger.log("Host=", host, req.query);

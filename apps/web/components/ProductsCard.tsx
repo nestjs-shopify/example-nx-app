@@ -1,23 +1,8 @@
-import {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import {
-  gql,
-  useMutation,
-} from '@apollo/client';
-import {
-  Toast,
-  useAppBridge,
-} from '@shopify/app-bridge-react';
-import {
-  Button,
-  LegacyCard,
-  Text,
-  VerticalStack,
-} from '@shopify/polaris';
+import { gql, useMutation } from '@apollo/client';
+import { Toast, useAppBridge } from '@shopify/app-bridge-react';
+import { Button, LegacyCard, Text, VerticalStack } from '@shopify/polaris';
 
 import { userLoggedInFetch } from '../utils/userLoggedInFetch';
 
@@ -35,7 +20,6 @@ export function ProductsCard() {
   const [populateProduct, { loading }] = useMutation(PRODUCTS_QUERY);
   const [productCount, setProductCount] = useState(0);
   const [hasResults, setHasResults] = useState(false);
-
 
   const app = useAppBridge();
   const fetch = userLoggedInFetch(app);
@@ -89,13 +73,14 @@ export function ProductsCard() {
                     },
                   })
                 )
-              ).then(() => {
-                updateProductCount();
-                setHasResults(true);
-              }).catch(ex => {
-                console.error(ex)
-              })
-              ;
+              )
+                .then(() => {
+                  updateProductCount();
+                  setHasResults(true);
+                })
+                .catch((ex) => {
+                  console.error(ex);
+                });
             }}
           >
             Populate 1 product
