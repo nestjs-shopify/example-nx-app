@@ -26,6 +26,8 @@ Copy the example environment variables and fill in yours:
 
 ```
 cp .env.example .env
+cp apps/web/.env.example apps/web/.env
+cp apps/api/.env.example apps/api/.env
 ```
 
 The `HOST` env var should be your full Ngrok URL eg: https://7c350f27f75f.ngrok.io
@@ -33,8 +35,7 @@ The `HOST` env var should be your full Ngrok URL eg: https://7c350f27f75f.ngrok.
 Run the migrations:
 
 ```
-cd apps/api
-npx mikro-orm schema:update -r
+npm run typeorm:up
 ```
 
 ## Running
