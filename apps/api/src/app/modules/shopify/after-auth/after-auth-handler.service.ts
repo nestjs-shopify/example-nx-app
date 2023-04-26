@@ -1,6 +1,9 @@
 import { ShopifyAuthAfterHandler } from '@nestjs-shopify/auth';
 import { ShopifyWebhooksService } from '@nestjs-shopify/webhooks';
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 
 import { SessionEntity } from '../../../entities/session.entity';
 import { ShopsService } from '../../shops/shops.service';
@@ -42,6 +45,19 @@ export class AfterAuthHandlerService implements ShopifyAuthAfterHandler {
           return;
         } else {
           return resp.redirect(`/api/offline/auth?shop=${shop}`);
+        }
+      }
+      if(session.expires <= new Date()) {
+        //Session expired, get new one
+        if (fastifyEnabled) {
+          const res = resp.raw;
+          res.writeHead(302, {
+            Location: `/api/online/auth?shop=${shop}`,
+          });
+          res.end();
+          return;
+        } else {
+          return resp.redirect(`/api/online/auth?shop=${shop}`);
         }
       }
       if (fastifyEnabled) {
