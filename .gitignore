@@ -7,7 +7,7 @@
 
 # dependencies
 node_modules
-/.env
+**/*.env
 *.sqlite3
 
 # IDEs and editors
