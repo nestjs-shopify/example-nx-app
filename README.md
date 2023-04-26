@@ -12,7 +12,7 @@ a global prefix to `/api`.
 
 Because we use NX proxies, we basically disable the usage of NextJS API requests in the `pages/api` folder because the requests are always proxied to the backend.
 
-This application uses [Mikro-ORM](https://mikro-orm.io) for it's database. When performing offline auth, the authenticated shop gets inserted into the `shops` table with an offline token. This token can then be used for webhook/background operations.
+This application uses [Type-ORM](https://typeorm.io/) for it's database. When performing offline auth, the authenticated shop gets inserted into the `shops` table with an offline token. This token can then be used for webhook/background operations.
 
 ## Setup
 
@@ -44,12 +44,16 @@ On terminal window 1:
 
 ```
 npx nx run api:serve
+Or
+npm run start:api
 ```
 
 On terminal window 2:
 
 ```
 npx nx run web:serve
+Or
+npm run start:web
 ```
 
 Visit `https://<HOST>/?shop=<SHOP>` to start the OAuth installation procedure of your app.
