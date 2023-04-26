@@ -1,15 +1,6 @@
-import {
-  CurrentSession,
-  UseShopifyAuth,
-} from '@nestjs-shopify/auth';
+import { CurrentSession, UseShopifyAuth } from '@nestjs-shopify/auth';
 import { SHOPIFY_API_CONTEXT } from '@nestjs-shopify/core';
-import {
-  Controller,
-  Get,
-  Inject,
-  Redirect,
-  Response,
-} from '@nestjs/common';
+import { Controller, Get, Inject, Redirect, Response } from '@nestjs/common';
 import { Shopify } from '@shopify/shopify-api';
 import { restResources } from '@shopify/shopify-api/rest/admin/2023-01';
 
@@ -31,16 +22,16 @@ export class ProductsController {
   @Get('test')
   @Redirect()
   async test(
-    @Response() res,
+    @Response() res
     // @CurrentSession() session: SessionEntity
-    ) {
-      // console.log("test", res)
-      // return
-      res.header("location","https://vnexpress.net")
-      // res.writeHead(302,'https://vnexpress.net');
-      res.end()
-      return
-      // return res.redirect("https://vnexpress.net")
+  ) {
+    // console.log("test", res)
+    // return
+    res.header('location', 'https://vnexpress.net');
+    // res.writeHead(302,'https://vnexpress.net');
+    res.end();
+    return;
+    // return res.redirect("https://vnexpress.net")
     // return await this.shopifyApi.rest.Product.count({ session });
   }
 }

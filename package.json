@@ -11,6 +11,7 @@
     "test": "nx test",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "typeorm:create": "npm run typeorm -- migration:create",
+    "typeorm:migration": "node tools/cli/gen-migration.mjs --name",
     "typeorm:up": "npm run typeorm -- --dataSource=./data-source.ts migration:run",
     "typeorm:down": "npm run typeorm -- --dataSource=./data-source.ts migration:revert",
     "typeorm:show": "npm run typeorm -- --dataSource=./data-source.ts migration:show"

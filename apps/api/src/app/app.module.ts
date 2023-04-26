@@ -19,6 +19,7 @@ import { ShopifyOfflineConfigService } from './modules/shopify/services/shopify-
 import { ShopifyOnlineConfigService } from './modules/shopify/services/shopify-online-config.service';
 import { WebhooksModule } from './modules/shopify/webhooks/webhooks.module';
 import { ComponentModule } from './components/component.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -45,5 +46,6 @@ import { ComponentModule } from './components/component.module';
     ProductsModule,
     ComponentModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}

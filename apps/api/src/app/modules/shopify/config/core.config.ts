@@ -1,13 +1,7 @@
 import { ShopifyCoreOptions } from '@nestjs-shopify/core';
 import { Logger } from '@nestjs/common';
-import {
-  ConfigType,
-  registerAs,
-} from '@nestjs/config';
-import {
-  ApiVersion,
-  LogSeverity,
-} from '@shopify/shopify-api';
+import { ConfigType, registerAs } from '@nestjs/config';
+import { ApiVersion, LogSeverity } from '@shopify/shopify-api';
 import { restResources } from '@shopify/shopify-api/rest/admin/2023-01';
 
 const logger = new Logger('Shopify');
