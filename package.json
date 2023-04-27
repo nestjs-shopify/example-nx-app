@@ -16,7 +16,8 @@
     "typeorm:down": "npm run typeorm -- --dataSource=./data-source.ts migration:revert",
     "typeorm:show": "npm run typeorm -- --dataSource=./data-source.ts migration:show",
     "shopify": "shopify",
-    "update-url": "node tools/cli/update.url.mjs"
+    "update-url": "node tools/cli/update.url.mjs",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
@@ -97,6 +98,7 @@
     "eslint-plugin-jsx-a11y": "6.7.1",
     "eslint-plugin-react": "7.32.2",
     "eslint-plugin-react-hooks": "4.6.0",
+    "husky": "^8.0.3",
     "jest": "29.5.0",
     "jest-environment-jsdom": "29.5.0",
     "nx": "15.9.2",
