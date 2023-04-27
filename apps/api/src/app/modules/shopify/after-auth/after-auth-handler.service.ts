@@ -47,7 +47,7 @@ export class AfterAuthHandlerService implements ShopifyAuthAfterHandler {
           return resp.redirect(`/api/offline/auth?shop=${shop}`);
         }
       }
-      if(session.expires <= new Date()) {
+      if (session.expires && session.expires <= new Date()) {
         //Session expired, get new one
         if (fastifyEnabled) {
           const res = resp.raw;
