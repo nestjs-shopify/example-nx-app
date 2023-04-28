@@ -26,18 +26,6 @@ export class ProductsController {
   @Get('count')
   async count(@CurrentSession() session: SessionEntity) {
 
-    // const postData = {
-    //   client_id: process.env.SHOPIFY_API_KEY,
-    //   client_secret: process.env.SHOPIFY_API_SECRET,
-    //   refresh_token: "31867d396ab9bc13128d459c392402c2-1682517368",
-    //   access_token: session.accessToken,
-    // }
-    // const response = await fetch(`https://${session.shop}/admin/oauth/access_token.json`, {
-    //   method: "post",
-    //   body: JSON.stringify(postData),
-    //   headers: {"Content-Type": "application/json"}
-    // })
-    // console.log("response = ",session, postData, await response.json())
     return await this.shopifyApi.rest.Product.count({ session });
   }
 

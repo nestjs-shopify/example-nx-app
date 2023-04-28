@@ -3,6 +3,8 @@ import { Module } from '@nestjs/common';
 import { ShopEntity } from '../../../entities/shop.entity';
 import { ProductsCreateWebhookHandler } from './handlers/products-create.webhook-handler';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ShopifyWebhookConsumer } from "./webhook-queue-processor";
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
@@ -10,7 +12,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     ShopifyWebhooksModule.forRoot({
       path: '/shopify/webhooks',
     }),
+    BullModule.registerQueue({
+      name: 'shopifyWebhookQueue',
+    }),
   ],
-  providers: [ProductsCreateWebhookHandler],
+  providers: [ProductsCreateWebhookHandler, ShopifyWebhookConsumer],
 })
 export class WebhooksModule {}

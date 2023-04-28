@@ -3,4 +3,5 @@ export const appConfig = (): Record<string, unknown> => ({
   PORT: parseInt(process.env.PORT) || 8080,
   TIMEZONE: process.env.TIMEZONE || '+07:00',
   API_PREFIX: process.env.API_PREFIX,
+  WEBHOOK_PATH: '/api/shopify/webhooks',
 });
