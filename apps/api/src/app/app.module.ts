@@ -51,7 +51,7 @@ import { RedisOptions } from 'ioredis';
           const host = process.env.REDIS_HOST;
           const port = parseInt(process.env.REDIS_PORT) || 6379;
           const password = process.env.REDIS_PASS;
-          const db = parseInt(process.env.REDIS_DB) || 0;
+          const db = parseInt(process.env.REDIS_DB) || 1;
           const redisOption: RedisOptions = {
             host: host,
             port: port,
