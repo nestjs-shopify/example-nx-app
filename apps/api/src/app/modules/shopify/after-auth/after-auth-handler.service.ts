@@ -23,13 +23,13 @@ export class AfterAuthHandlerService implements ShopifyAuthAfterHandler {
     session: SessionEntity
   ): Promise<void> {
     const { isOnline, shop, accessToken } = session;
-    let host = 'onionstudios.ddns.net';
+    let host = '';
     const fastifyEnabled = process.env.FASTIFY_ENABLED == '1' || false;
 
     if (fastifyEnabled) {
       // Logger.log("fastifyEnabled", req, req.query);//onionstudios.ddns.net/?shop=getting-started-for-dev.myshopify.com)
       host =
-        req.query['host'] || req.headers['Host'] || 'onionstudios.ddns.net';
+        req.query['host'] || req.headers['Host'];
     } else {
       host = req.query['host'];
     }
