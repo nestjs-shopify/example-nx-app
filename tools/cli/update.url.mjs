@@ -1,6 +1,6 @@
 'use strict';
 
-import { spawn } from 'child_process';
+import { exec } from 'child_process';
 import { config } from 'dotenv';
 import updateDotenv from 'update-dotenv';
 
@@ -20,16 +20,7 @@ async function updateUrl() {
     const appUrl = process.env.HOST;
     const redirectUrls = `${appUrl}/api/online/auth,${appUrl}/api/online/calback,${appUrl}/api/offline/auth,${appUrl}/api/offline/calback`;
 
-    const updateCmd = spawn('npm', [
-      'run',
-      'shopify',
-      'app',
-      'update-url',
-      '--',
-      `--api-key=${apiKey}`,
-      `--app-url=${appUrl}`,
-      `--redirect-urls=${redirectUrls}`,
-    ]);
+    const updateCmd = exec(`npm run shopify app update-url -- --api-key=${apiKey} --app-url=${appUrl} --redirect-urls=${redirectUrls}`);
     updateCmd.stdout.on('data', (data) => {
       console.log(`${data}`);
     });
