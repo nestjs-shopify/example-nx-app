@@ -18,7 +18,7 @@ async function updateUrl() {
   await new Promise((resolve) => {
     const apiKey = process.env.SHOPIFY_API_KEY;
     const appUrl = process.env.HOST;
-    const redirectUrls = `${appUrl}/api/online/auth,${appUrl}/api/online/calback,${appUrl}/api/offline/auth,${appUrl}/api/offline/calback`;
+    const redirectUrls = `${appUrl}/api/online/auth,${appUrl}/api/online/callback,${appUrl}/api/offline/auth,${appUrl}/api/offline/callback`;
 
     const updateCmd = exec(`npm run shopify app update-url -- --api-key=${apiKey} --app-url=${appUrl} --redirect-urls=${redirectUrls}`);
     updateCmd.stdout.on('data', (data) => {
