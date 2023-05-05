@@ -21,7 +21,7 @@ import { ShopifyCoreConfigService } from './modules/shopify/services/shopify-cor
 import { ShopifyOfflineConfigService } from './modules/shopify/services/shopify-offline-config.service';
 import { ShopifyOnlineConfigService } from './modules/shopify/services/shopify-online-config.service';
 import { WebhooksModule } from './modules/shopify/webhooks/webhooks.module';
-import { BullModule } from '@nestjs/bull';
+import { BullModule, BullRootModuleOptions } from '@nestjs/bull';
 import { RedisOptions } from 'ioredis';
 
 @Module({
@@ -45,23 +45,24 @@ import { RedisOptions } from 'ioredis';
       useClass: ShopifyOnlineConfigService,
     }),
     BullModule.forRootAsync({
-      useFactory: async (configService: ConfigService) =>
-        (() => {
-          // console.log("BullModule", configRedis)
-          const host = process.env.REDIS_HOST;
-          const port = parseInt(process.env.REDIS_PORT) || 6379;
-          const password = process.env.REDIS_PASS;
-          const db = parseInt(process.env.REDIS_DB) || 1;
-          const redisOption: RedisOptions = {
-            host: host,
-            port: port,
-            password: password,
-            db,
-          };
-          return {
-            redis: redisOption,
-          };
-        })(),
+      useFactory: async (
+        configService: ConfigService
+      ): Promise<BullRootModuleOptions> => {
+        const host = configService.get<string>('REDIS_HOST');
+        const port = configService.get<number>('REDIS_PORT') || 6379;
+        const password = configService.get<string>('REDIS_PASS');
+        const db = configService.get<number>('REDIS_DB') || 1;
+        const redisOption: RedisOptions = {
+          host: host,
+          port: port,
+          password: password,
+          db,
+        };
+        // console.log("BullModule", redisOption)
+        return {
+          redis: redisOption,
+        };
+      },
       inject: [ConfigService],
     }),
     ShopifyGraphqlProxyModule,

@@ -1,11 +1,8 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { DateAudit } from '../base/date.audit.entity';
 
 @Entity({ name: 'shops' })
-export class ShopEntity {
+export class ShopEntity extends DateAudit {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -15,18 +12,8 @@ export class ShopEntity {
   @Column({ name: 'access_token', type: 'varchar', nullable: true })
   accessToken: string;
 
-  @Column('timestamp', {
-    name: 'created_at',
-    select: false,
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: Date;
-
-  @Column('timestamp', {
-    name: 'updated_at',
-    select: false,
-    onUpdate: 'CURRENT_TIMESTAMP',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  updatedAt: Date;
+  constructor(partial: Partial<ShopEntity>) {
+    super();
+    Object.assign(this, partial);
+  }
 }
