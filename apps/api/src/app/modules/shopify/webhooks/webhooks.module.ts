@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { ShopEntity } from '../../../entities/shop.entity';
 import { ProductsCreateWebhookHandler } from './handlers/products-create.webhook-handler';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ShopifyWebhookConsumer } from "./webhook-queue-processor";
+import { ShopifyWebhookConsumer } from './webhook-queue-processor';
 import { BullModule } from '@nestjs/bull';
 
 @Module({

@@ -1,30 +1,26 @@
 import { Processor, Process, OnQueueActive, OnQueueError } from '@nestjs/bull';
 import { DoneCallback, Job } from 'bull';
-import { SessionEntity, ShopEntity } from "../../../entities";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { ShopsService } from "../../shops/shops.service";
+import { SessionEntity, ShopEntity } from '../../../entities';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { ShopsService } from '../../shops/shops.service';
 
 @Processor('shopifyWebhookQueue')
 export class ShopifyWebhookConsumer {
   constructor(
     @InjectRepository(ShopEntity)
-    private readonly shopRepo: Repository<ShopEntity>,
-  ) {
-
-  }
+    private readonly shopRepo: Repository<ShopEntity>
+  ) {}
   @OnQueueActive()
   onActive(job: Job) {
     console.log(
-      `Processing job ${job.id} of type ${job.name} with data ${job.data}...`,
+      `Processing job ${job.id} of type ${job.name} with data ${job.data}...`
     );
   }
 
   @OnQueueError()
   onError(error: Error) {
-    console.error(
-      error,
-    );
+    console.error(error);
   }
 
   @Process()
@@ -40,8 +36,8 @@ export class ShopifyWebhookConsumer {
       case 'PRODUCTS_CREATE':
         break;
       case 'APP_UNINSTALLED':
-        void await this.shopRepo.delete({domain: shop})
-        void await this.shopRepo.manager.delete(SessionEntity,{shop})
+        void (await this.shopRepo.delete({ domain: shop }));
+        void (await this.shopRepo.manager.delete(SessionEntity, { shop }));
         break;
     }
     return done();

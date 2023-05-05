@@ -40,7 +40,7 @@ function MyProvider(props) {
 
 class MyApp extends App {
   render() {
-    const { Component, pageProps, host } = this.props as any;
+    const { Component, pageProps, host } = this.props;
 
     return (
       <PolarisProvider i18n={translations}>

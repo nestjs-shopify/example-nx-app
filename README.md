@@ -3,7 +3,7 @@
 Uses [NX monorepo](https://nx.dev) under the hood. An example Shopify application
 with a [NestJS](https://nestjs.com) API backend, and a [NextJS](https://nextjs.org) frontend.
 
-Uses [@nestjs-shopify/*](https://github.com/nestjs-shopify/nestjs-shopify) packages.
+Uses [@nestjs-shopify/\*](https://github.com/nestjs-shopify/nestjs-shopify) packages.
 
 ## Architecture
 
@@ -41,18 +41,20 @@ npm run typeorm:up
 ```
 
 Create migrations:
+
 ```
 npm run typeorm:create <path-and-name>
 
 npm run typeorm:create ./apps/api/src/app/database/migrations/hihi
 ```
+
 or
+
 ```
 npm typeorm:migration <name>
 
 npm typeorm:migration hihi
 ```
-
 
 ## Running
 
@@ -61,7 +63,9 @@ On terminal window 1:
 ```
 npx nx run api:serve
 ```
+
 or
+
 ```
 npm run start:api
 ```
@@ -71,7 +75,9 @@ On terminal window 2:
 ```
 npx nx run web:serve
 ```
+
 or
+
 ```
 npm run start:web
 ```
@@ -87,6 +93,7 @@ npm run format:write
 ```
 
 Use extentions
+
 ```
 Prettier - Code formatter
 ```

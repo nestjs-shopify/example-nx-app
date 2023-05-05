@@ -23,7 +23,10 @@ export class ShopsService {
         accessToken,
       });
     }
-    void await this.repo.manager.delete(SessionEntity,{shop: shop.domain, isOnline: true});
+    void (await this.repo.manager.delete(SessionEntity, {
+      shop: shop.domain,
+      isOnline: true,
+    }));
 
     return shop;
   }

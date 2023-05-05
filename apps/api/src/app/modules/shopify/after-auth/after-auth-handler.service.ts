@@ -1,9 +1,6 @@
 import { ShopifyAuthAfterHandler } from '@nestjs-shopify/auth';
 import { ShopifyWebhooksService } from '@nestjs-shopify/webhooks';
-import {
-  Injectable,
-  Logger,
-} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 import { SessionEntity } from '../../../entities/session.entity';
 import { ShopsService } from '../../shops/shops.service';
@@ -28,8 +25,7 @@ export class AfterAuthHandlerService implements ShopifyAuthAfterHandler {
 
     if (fastifyEnabled) {
       // Logger.log("fastifyEnabled", req, req.query);//onionstudios.ddns.net/?shop=getting-started-for-dev.myshopify.com)
-      host =
-        req.query['host'] || req.headers['Host'];
+      host = req.query['host'] || req.headers['Host'];
     } else {
       host = req.query['host'];
     }
