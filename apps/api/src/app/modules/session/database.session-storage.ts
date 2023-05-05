@@ -1,7 +1,15 @@
+import {
+  In,
+  Repository,
+} from 'typeorm';
+
 import { SessionStorage } from '@nestjs-shopify/core';
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+
 import { SessionEntity } from '../../entities/session.entity';
 
 @Injectable()
@@ -36,7 +44,7 @@ export class DatabaseSessionStorage implements SessionStorage {
   async deleteSession(id: string): Promise<boolean> {
     try {
       const session = await this.repo.findOneBy({ id });
-      await this.repo.delete(session.id);
+      void await this.repo.delete(session.id);
       return true;
     } catch (err) {
       this.logger.error(err);
@@ -46,8 +54,9 @@ export class DatabaseSessionStorage implements SessionStorage {
   }
 
   async deleteSessions(ids: string[]): Promise<boolean> {
-    const sessions = await this.repo.find({ where: { id: In(ids) } });
-    sessions.forEach((s) => this.repo.remove(s));
+    // const sessions = await this.repo.find({ where: { id: In(ids) } });
+    // sessions.forEach((s) => this.repo.remove(s));
+    void await this.repo.delete({id: In(ids)})
 
     return true;
   }

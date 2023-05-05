@@ -2,7 +2,10 @@ import { ShopifyAuthModule } from '@nestjs-shopify/auth';
 import { ShopifyCoreModule } from '@nestjs-shopify/core';
 import { ShopifyGraphqlProxyModule } from '@nestjs-shopify/graphql';
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
+import { AppController } from './app.controller';
+import { ComponentModule } from './components/component.module';
 import { appConfig } from './configs/app.config';
 import { databaseConfig } from './configs/database.config';
 import { DatabaseModule } from './database/database.module';
@@ -18,8 +21,8 @@ import { ShopifyCoreConfigService } from './modules/shopify/services/shopify-cor
 import { ShopifyOfflineConfigService } from './modules/shopify/services/shopify-offline-config.service';
 import { ShopifyOnlineConfigService } from './modules/shopify/services/shopify-online-config.service';
 import { WebhooksModule } from './modules/shopify/webhooks/webhooks.module';
-import { ComponentModule } from './components/component.module';
-import { AppController } from './app.controller';
+import { BullModule } from '@nestjs/bull';
+import { RedisOptions } from 'ioredis';
 
 @Module({
   imports: [
@@ -40,6 +43,26 @@ import { AppController } from './app.controller';
     ShopifyAuthModule.forRootAsyncOnline({
       imports: [ConfigModule.forFeature(shopifyOnlineConfig), AfterAuthModule],
       useClass: ShopifyOnlineConfigService,
+    }),
+    BullModule.forRootAsync({
+      useFactory: async (configService: ConfigService) =>
+        (() => {
+          // console.log("BullModule", configRedis)
+          const host = process.env.REDIS_HOST;
+          const port = parseInt(process.env.REDIS_PORT) || 6379;
+          const password = process.env.REDIS_PASS;
+          const db = parseInt(process.env.REDIS_DB) || 1;
+          const redisOption: RedisOptions = {
+            host: host,
+            port: port,
+            password: password,
+            db,
+          };
+          return {
+            redis: redisOption,
+          };
+        })(),
+      inject: [ConfigService],
     }),
     ShopifyGraphqlProxyModule,
     WebhooksModule,

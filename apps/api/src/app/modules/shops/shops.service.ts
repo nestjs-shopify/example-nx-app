@@ -1,6 +1,9 @@
+import { Repository } from 'typeorm';
+
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+
+import { SessionEntity } from '../../entities';
 import { ShopEntity } from '../../entities/shop.entity';
 
 @Injectable()
@@ -20,6 +23,8 @@ export class ShopsService {
         accessToken,
       });
     }
+    void await this.repo.manager.delete(SessionEntity,{shop: shop.domain, isOnline: true});
+
     return shop;
   }
 

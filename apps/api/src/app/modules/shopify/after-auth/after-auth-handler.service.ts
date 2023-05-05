@@ -1,6 +1,9 @@
 import { ShopifyAuthAfterHandler } from '@nestjs-shopify/auth';
 import { ShopifyWebhooksService } from '@nestjs-shopify/webhooks';
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 
 import { SessionEntity } from '../../../entities/session.entity';
 import { ShopsService } from '../../shops/shops.service';
@@ -20,13 +23,13 @@ export class AfterAuthHandlerService implements ShopifyAuthAfterHandler {
     session: SessionEntity
   ): Promise<void> {
     const { isOnline, shop, accessToken } = session;
-    let host = 'onionstudios.ddns.net';
+    let host = '';
     const fastifyEnabled = process.env.FASTIFY_ENABLED == '1' || false;
 
     if (fastifyEnabled) {
       // Logger.log("fastifyEnabled", req, req.query);//onionstudios.ddns.net/?shop=getting-started-for-dev.myshopify.com)
       host =
-        req.query['host'] || req.headers['Host'] || 'onionstudios.ddns.net';
+        req.query['host'] || req.headers['Host'];
     } else {
       host = req.query['host'];
     }
@@ -42,6 +45,19 @@ export class AfterAuthHandlerService implements ShopifyAuthAfterHandler {
           return;
         } else {
           return resp.redirect(`/api/offline/auth?shop=${shop}`);
+        }
+      }
+      if (session.expires && session.expires <= new Date()) {
+        //Session expired, get new one
+        if (fastifyEnabled) {
+          const res = resp.raw;
+          res.writeHead(302, {
+            Location: `/api/online/auth?shop=${shop}`,
+          });
+          res.end();
+          return;
+        } else {
+          return resp.redirect(`/api/online/auth?shop=${shop}`);
         }
       }
       if (fastifyEnabled) {
