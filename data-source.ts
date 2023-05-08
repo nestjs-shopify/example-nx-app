@@ -5,7 +5,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 
 import { ConfigService } from '@nestjs/config';
 
-config();
+config({ path: './apps/api/.env' });
 const configService = new ConfigService();
 
 export const AppDataSource = new DataSource({
