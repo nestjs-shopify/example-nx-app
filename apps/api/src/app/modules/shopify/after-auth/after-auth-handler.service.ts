@@ -1,6 +1,9 @@
 import { ShopifyAuthAfterHandler } from '@nestjs-shopify/auth';
 import { ShopifyWebhooksService } from '@nestjs-shopify/webhooks';
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { SHOPIFY_API_CONTEXT } from '@nestjs-shopify/core';
+import { Shopify } from '@shopify/shopify-api';
+import { restResources } from '@shopify/shopify-api/rest/admin/2023-01';
 
 import { SessionEntity } from '../../../entities/session.entity';
 import { ShopsService } from '../../shops/shops.service';
@@ -10,76 +13,82 @@ import { ShopsService } from '../../shops/shops.service';
 @Injectable()
 export class AfterAuthHandlerService implements ShopifyAuthAfterHandler {
   constructor(
+    @Inject(SHOPIFY_API_CONTEXT)
+    private readonly shopifyApi: Shopify<typeof restResources>,
     private readonly shopsService: ShopsService,
     private readonly webhookService: ShopifyWebhooksService
   ) {}
 
   async afterAuth(
     req: any, //IncomingMessage,
-    resp: any, //ServerResponse,
+    res: any, //ServerResponse,
     session: SessionEntity
   ): Promise<void> {
     const { isOnline, shop, accessToken } = session;
-    let host = '';
+
+    // If this is an offline OAuth process
+    //  - store shop
+    //  - register webhooks
+    //  - immediately kick off the online one
+    if (!isOnline) {
+      await this.shopsService.findOrCreate(shop, accessToken);
+
+      Logger.log('Registering webhooks');
+      await this.webhookService.registerWebhooks(session);
+
+      Logger.log(
+        'Completing offline token OAuth, redirecting to online token OAuth'
+      );
+      this.redirect(res, `/api/online/auth?shop=${shop}`);
+
+      return;
+    }
+
+    if (!(await this.shopsService.exists(shop))) {
+      Logger.log(
+        'Shop not found, redirecting to offline token OAuth to install app'
+      );
+      this.redirect(res, `/api/offline/auth?shop=${shop}`);
+      return;
+    }
+
+    Logger.log(
+      'Completing online token OAuth, redirecting to Shopify or App Root'
+    );
+    this.redirectToShopifyOrAppRoot(req, res, shop);
+  }
+
+  private async redirectToShopifyOrAppRoot(req: any, res: any, shop: string) {
+    const fastifyEnabled = process.env.FASTIFY_ENABLED == '1' || false;
+    const { isEmbeddedApp } = this.shopifyApi.config;
+
+    let redirectUrl: string;
+    if (isEmbeddedApp) {
+      redirectUrl = await this.shopifyApi.auth.getEmbeddedAppUrl({
+        rawRequest: fastifyEnabled ? req.raw : req,
+        rawResponse: fastifyEnabled ? res.raw : res,
+      });
+    } else {
+      const host = req.query['host'];
+      redirectUrl = `/?shop=${shop}&host=${encodeURIComponent(host)}`;
+    }
+
+    this.redirect(res, redirectUrl);
+  }
+
+  private redirect(res: any, redirectUrl: string): void {
     const fastifyEnabled = process.env.FASTIFY_ENABLED == '1' || false;
 
-    if (fastifyEnabled) {
-      // Logger.log("fastifyEnabled", req, req.query);//onionstudios.ddns.net/?shop=getting-started-for-dev.myshopify.com)
-      host = req.query['host'] || req.headers['Host'];
-    } else {
-      host = req.query['host'];
-    }
-    // Logger.log("Host=", host, req.query);
-    if (isOnline) {
-      if (!(await this.shopsService.exists(shop))) {
-        if (fastifyEnabled) {
-          const res = resp.raw;
-          res.writeHead(302, {
-            Location: `/api/offline/auth?shop=${shop}`,
-          });
-          res.end();
-          return;
-        } else {
-          return resp.redirect(`/api/offline/auth?shop=${shop}`);
-        }
-      }
-      if (session.expires && session.expires <= new Date()) {
-        //Session expired, get new one
-        if (fastifyEnabled) {
-          const res = resp.raw;
-          res.writeHead(302, {
-            Location: `/api/online/auth?shop=${shop}`,
-          });
-          res.end();
-          return;
-        } else {
-          return resp.redirect(`/api/online/auth?shop=${shop}`);
-        }
-      }
-      if (fastifyEnabled) {
-        const res = resp.raw;
-        res.writeHead(302, {
-          Location: `/?shop=${shop}&host=${host}`,
-        });
-        res.end();
-        return;
-      } else {
-        return resp.redirect(`/?shop=${shop}&host=${host}`);
-      }
-    }
+    Logger.log(`Redirecting to host at ${redirectUrl}`);
 
-    await this.shopsService.findOrCreate(shop, accessToken);
-    Logger.log('Registering webhooks');
-    await this.webhookService.registerWebhooks(session);
     if (fastifyEnabled) {
-      const res = resp.raw;
-      res.writeHead(302, {
-        Location: `/api/online/auth?shop=${shop}`,
-      });
-      res.end();
-      return;
+      res.raw
+        .writeHead(302, {
+          Location: redirectUrl,
+        })
+        .end();
     } else {
-      return resp.redirect(`/api/online/auth?shop=${shop}`);
+      res.redirect(redirectUrl);
     }
   }
 }
