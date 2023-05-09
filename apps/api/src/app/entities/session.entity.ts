@@ -8,12 +8,12 @@ import {
 
 import { OnlineAccessInfo, Session } from '@shopify/shopify-api';
 
-@Entity({ name: 'sessions' })
+@Entity({ name: 'session' })
 export class SessionEntity extends Session {
   @PrimaryColumn({ type: 'varchar' })
   id: string;
 
-  @Column({ name: 'shop', type: 'varchar', nullable: true })
+  @Column({ name: 'domain', type: 'varchar', nullable: true })
   shop: string;
 
   @Column({ name: 'state', type: 'varchar', nullable: true })
