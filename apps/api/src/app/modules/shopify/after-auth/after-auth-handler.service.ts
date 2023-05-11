@@ -1,12 +1,16 @@
 import { ShopifyAuthAfterHandler } from '@nestjs-shopify/auth';
 import { ShopifyWebhooksService } from '@nestjs-shopify/webhooks';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { SHOPIFY_API_CONTEXT } from '@nestjs-shopify/core';
+import {
+  InjectShopifySessionStorage,
+  SHOPIFY_API_CONTEXT,
+} from '@nestjs-shopify/core';
 import { Shopify } from '@shopify/shopify-api';
 import { restResources } from '@shopify/shopify-api/rest/admin/2023-01';
 
 import { SessionEntity } from '../../../entities/session.entity';
 import { ShopsService } from '../../shops/shops.service';
+import { DatabaseSessionStorage } from '../../session/database.session-storage';
 
 // import { FastifyRequest, FastifyReply } from 'fastify';
 
@@ -16,7 +20,9 @@ export class AfterAuthHandlerService implements ShopifyAuthAfterHandler {
     @Inject(SHOPIFY_API_CONTEXT)
     private readonly shopifyApi: Shopify<typeof restResources>,
     private readonly shopsService: ShopsService,
-    private readonly webhookService: ShopifyWebhooksService
+    private readonly webhookService: ShopifyWebhooksService,
+    @InjectShopifySessionStorage()
+    private readonly databaseSessionStorage: DatabaseSessionStorage
   ) {}
 
   async afterAuth(
@@ -61,6 +67,14 @@ export class AfterAuthHandlerService implements ShopifyAuthAfterHandler {
   private async redirectToShopifyOrAppRoot(req: any, res: any, shop: string) {
     const fastifyEnabled = process.env.FASTIFY_ENABLED == '1' || false;
     const { isEmbeddedApp } = this.shopifyApi.config;
+    const appInstalled = await this.databaseSessionStorage.findSessionsByShop(
+      req.query.shop
+    );
+
+    if (!appInstalled && !req.url.match(/^\/exitiframe/i)) {
+      await this.redirectToAuth(req, res);
+      return;
+    }
 
     let redirectUrl: string;
     if (isEmbeddedApp) {
@@ -90,5 +104,42 @@ export class AfterAuthHandlerService implements ShopifyAuthAfterHandler {
     } else {
       res.redirect(redirectUrl);
     }
+  }
+
+  async redirectToAuth(request, reply) {
+    if (!request.query.shop) {
+      return reply.code(500).send('No shop provided');
+    }
+
+    if (request.query.embedded === '1') {
+      return this.clientSideRedirect(request, reply);
+    }
+
+    return await this.serverSideRedirect(request, reply);
+  }
+
+  clientSideRedirect(request, reply) {
+    const shop = this.shopifyApi.utils.sanitizeShop(request.query.shop);
+    const redirectUriParams = new URLSearchParams({
+      shop,
+      host: request.query.host,
+    }).toString();
+    const queryParams = new URLSearchParams({
+      ...request.query,
+      shop,
+      redirectUri: `https://${this.shopifyApi.config.hostName}/api/offline/auth?${redirectUriParams}`,
+    }).toString();
+
+    return reply.redirect(`/exitiframe?${queryParams}`);
+  }
+
+  async serverSideRedirect(request, reply) {
+    await this.shopifyApi.auth.begin({
+      rawRequest: request.raw,
+      rawResponse: reply.raw,
+      shop: request.query.shop,
+      callbackPath: '/api/auth/offline/callback',
+      isOnline: false,
+    });
   }
 }

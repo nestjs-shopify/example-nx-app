@@ -1,9 +1,15 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { DateAudit } from '../base/date.audit.entity';
 
 @Entity({ name: 'shop' })
 export class ShopEntity extends DateAudit {
-  @PrimaryGeneratedColumn({ type: "int", unsigned: true, name: "id" })
+  @PrimaryGeneratedColumn({ type: 'int', unsigned: true, name: 'id' })
   id: number;
 
   @Column({ name: 'domain', type: 'varchar', nullable: true })
