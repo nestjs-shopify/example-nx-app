@@ -21,7 +21,7 @@ export class DatabaseSessionStorage implements SessionStorage {
     }
 
     try {
-      await this.repo.persistAndFlush(entity);
+      await this.repo.getEntityManager().persistAndFlush(entity);
       return true;
     } catch (err) {
       this.logger.error(err);
@@ -37,7 +37,7 @@ export class DatabaseSessionStorage implements SessionStorage {
   async deleteSession(id: string): Promise<boolean> {
     try {
       const session = await this.repo.findOneOrFail(id);
-      await this.repo.removeAndFlush(session);
+      await this.repo.getEntityManager().removeAndFlush(session);
       return true;
     } catch (err) {
       this.logger.error(err);
@@ -47,9 +47,10 @@ export class DatabaseSessionStorage implements SessionStorage {
   }
 
   async deleteSessions(ids: string[]): Promise<boolean> {
+    const em = this.repo.getEntityManager();
     const sessions = await this.repo.find(ids);
-    sessions.forEach((s) => this.repo.remove(s));
-    await this.repo.flush();
+    sessions.forEach((s) => em.remove(s));
+    await em.flush();
 
     return true;
   }

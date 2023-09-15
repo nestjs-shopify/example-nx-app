@@ -21,7 +21,7 @@ export class ShopsService {
       });
     }
 
-    await this.repo.persistAndFlush(shop);
+    await this.repo.getEntityManager().persistAndFlush(shop);
     return shop;
   }
 
