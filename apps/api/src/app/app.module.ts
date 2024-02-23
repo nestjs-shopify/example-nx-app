@@ -1,6 +1,6 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { ShopifyAuthModule } from '@nestjs-shopify/auth';
-import { ShopifyCoreModule } from '@nestjs-shopify/core';
+import { ShopifyExpressModule } from '@nestjs-shopify/express';
 import { ShopifyGraphqlProxyModule } from '@nestjs-shopify/graphql';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -25,7 +25,7 @@ import { WebhooksModule } from './shopify/webhooks/webhooks.module';
       isGlobal: true,
     }),
     MikroOrmModule.forRootAsync(databaseConfig.asProvider()),
-    ShopifyCoreModule.forRootAsync({
+    ShopifyExpressModule.forRootAsync({
       imports: [ConfigModule.forFeature(shopifyCoreConfig), SessionModule],
       useClass: ShopifyCoreConfigService,
     }),
