@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { VerticalStack, Button, LegacyCard, Text } from '@shopify/polaris';
-import { Toast, useAppBridge } from '@shopify/app-bridge-react';
+import { useAppBridge } from '@shopify/app-bridge-react';
 import { gql, useMutation } from '@apollo/client';
 import { userLoggedInFetch } from '../utils/userLoggedInFetch';
 
@@ -32,16 +32,19 @@ export function ProductsCard() {
     updateProductCount();
   }, [updateProductCount]);
 
-  const toastMarkup = hasResults && (
-    <Toast
-      content="1 product created!"
-      onDismiss={() => setHasResults(false)}
-    />
-  );
+  const showToast = useCallback(() => {
+    if (hasResults) {
+      app.toast.show('1 product created!', {
+        onDismiss() {
+          setHasResults(false);
+        },
+      });
+    }
+  }, [app, hasResults, setHasResults]);
 
   return (
     <>
-      {toastMarkup}
+      {showToast()}
       <LegacyCard title="Product Counter" sectioned>
         <VerticalStack gap="4">
           <p>

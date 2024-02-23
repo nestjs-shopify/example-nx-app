@@ -4,10 +4,7 @@ import {
   HttpLink,
   InMemoryCache,
 } from '@apollo/client';
-import {
-  Provider as AppBridgeProvider,
-  useAppBridge,
-} from '@shopify/app-bridge-react';
+import { useAppBridge } from '@shopify/app-bridge-react';
 import { AppProvider as PolarisProvider } from '@shopify/polaris';
 import translations from '@shopify/polaris/locales/en.json';
 import '@shopify/polaris/build/esm/styles.css';
@@ -42,15 +39,7 @@ class MyApp extends App {
 
     return (
       <PolarisProvider i18n={translations}>
-        <AppBridgeProvider
-          config={{
-            apiKey: process.env.SHOPIFY_API_KEY,
-            host,
-            forceRedirect: true,
-          }}
-        >
-          <MyProvider Component={Component} host={host} {...pageProps} />
-        </AppBridgeProvider>
+        <MyProvider Component={Component} host={host} {...pageProps} />
       </PolarisProvider>
     );
   }
